@@ -180,3 +180,9 @@ logbinomial_table <- tbl_regression(
 		sex_cat ~ "Sex",
 	)
 )
+
+
+#Exploration
+library (flextable)
+
+tbl_ard_summary()
