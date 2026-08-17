@@ -27,6 +27,7 @@ nlsy_cc <- na.omit(nlsy_cats)
 # check to make sure it worked
 count(nlsy_cc, eyesight_cat)
 
+
 # create data/clean folder if it doesn't already exist
 if (!dir.exists(here::here("data", "clean"))) {
 	dir.create(here::here("data", "clean"))
@@ -34,3 +35,4 @@ if (!dir.exists(here::here("data", "clean"))) {
 
 # save the complete-case data
 write_rds(nlsy_cc, here::here("data", "clean", "nlsy-complete-cases.rds"))
+
