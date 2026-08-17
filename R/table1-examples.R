@@ -1,5 +1,6 @@
 library(tidyverse)
 library(gtsummary)
+install.packages("gtsummary", dependencies = TRUE)
 
 # Load and clean data
 nlsy_cols <- c(
@@ -81,4 +82,95 @@ tbl_summary(
   # add a caption
   modify_caption("**Participant characteristics**")
 
+# Make a tbl_summary(). Include categorical region, race/ethnicity, income, and
+# the sleep variables (use a helper function to select those) and make sure they
+# are nicely labeled.
+tbl_summary(
+	nlsy,
+	include = c(
+		race_eth_cat, region_cat, income,
+		starts_with("sleep")),
+	label = list(
+		race_eth_cat ~ "Race/ethnicity",
+		region_cat ~ "Region",
+		income ~ "Income",
+		sleep_wkdy ~ "Weekday Sleep",
+		sleep_wknd ~ "Weekend Sleep"
+))
 
+# Stratify the table by sex. Add a p-value comparing the sexes and an overall
+# column combining both sexes.
+tbl_summary(
+	nlsy,
+	include = c(
+		race_eth_cat, region_cat, income,
+		starts_with("sleep")),
+		by = sex_cat,
+	label = list(
+		race_eth_cat ~ "Race/ethnicity",
+		region_cat ~ "Region",
+		income ~ "Income",
+		sleep_wkdy ~ "Weekday Sleep",
+		sleep_wknd ~ "Weekend Sleep"
+	)) |>
+	add_p(test = list(
+		all_continuous() ~ "t.test",
+		all_categorical() ~ "chisq.test"
+	)) |>
+	add_overall(col_label = "**Total** N = {N}")
+
+
+# For the income variable, show the 10th and 90th percentiles of income with 3
+# digits, and for the sleep variables, show the min and the max with 1 digit.
+tbl_summary(
+	nlsy,
+	include = c(
+		race_eth_cat, region_cat, income,
+		starts_with("sleep")),
+	by = sex_cat,
+	digits = list(income ~ 3,
+								starts_with("sleep") ~ 1),
+	statistic = list(income ~ "{p10}, {p90}",
+									starts_with("sleep") ~ "{min}, {max}" ),
+	label = list(
+		race_eth_cat ~ "Race/ethnicity",
+		region_cat ~ "Region",
+		income ~ "Income",
+		sleep_wkdy ~ "Weekday Sleep",
+		sleep_wknd ~ "Weekend Sleep"
+	)) |>
+	add_p(test = list(
+		all_continuous() ~ "t.test",
+		all_categorical() ~ "chisq.test"
+	)) |>
+	add_overall(col_label = "**Total** N = {N}")
+
+# Add a footnote to the race/ethnicity variable with a link to the page
+# describing how NLSY classified participants
+tbl_summary(
+	nlsy,
+	include = c(
+		race_eth_cat, region_cat, income,
+		starts_with("sleep")),
+	by = sex_cat,
+	digits = list(income ~ 3,
+								starts_with("sleep") ~ 1),
+	statistic = list(income ~ "{p10}, {p90}",
+									 starts_with("sleep") ~ "{min}, {max}" ),
+	label = list(
+		race_eth_cat ~ "Race/ethnicity",
+		region_cat ~ "Region",
+		income ~ "Income",
+		sleep_wkdy ~ "Weekday Sleep",
+		sleep_wknd ~ "Weekend Sleep"
+	)) |>
+	add_p(test = list(
+		all_continuous() ~ "t.test",
+		all_categorical() ~ "chisq.test"
+	)) |>
+	add_overall(col_label = "**Total** N = {N}") |>
+	modify_footnote_body(
+		footnote = "https://www.nlsinfo.org/content/cohorts/nlsy79/topical-guide/household/race-ethnicity-immigration-data",
+		columns = "label",
+		rows = variable == "race_eth_cat" & row_type == "label"
+	)
