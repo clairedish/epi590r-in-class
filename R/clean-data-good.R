@@ -36,3 +36,26 @@ if (!dir.exists(here::here("data", "clean"))) {
 # save the complete-case data
 write_rds(nlsy_cc, here::here("data", "clean", "nlsy-complete-cases.rds"))
 
+std <- function(x, na.rm = TRUE) {
+	if (na.rm) {
+	new_x <-	na.omit(x)
+	} else {
+		new_x <- x
+	}
+	if (length(new_x)<= 1) {
+		stdval <- NA
+	} else {
+		n <- length(new_x)
+		xmean <- sum(new_x) / n
+		variance <- new_x - xmean
+		varsq <- variance^2
+		sum_of_squares <- sum(varsq)
+		n_minus_1 <- length(new_x) -1
+		stdval <- sqrt(sum_of_squares / n_minus_1)
+		stdval <- stdval
+	}
+	return(stdval)
+}
+
+std(nlsy$income)
+
