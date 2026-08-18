@@ -2,7 +2,8 @@
 title: "'gtsummary' in Quarto"
 format:
   html:
-    theme: vapor
+    theme: sketchy
+    backgroundcolor: pink
 execute:
   message: false
   warning: false
@@ -63,3 +64,29 @@ tbl_summary(
   include = c(sex_cat, race_eth_cat, region_cat,
               eyesight_cat, glasses, age_bir))
 ```
+
+The amount of sleep on weekends is the same across race and ethnicity. However, Black people appear to sleep an hour less on weekdays. @tbl-sleep
+
+```{r}
+#| label: tbl-sleep
+#| tbl-cap: "Sleep Statistics"
+table1 <- tbl_summary(
+  nlsy,
+  by = race_eth_cat,
+  include = c(sleep_wknd, sleep_wkdy),
+  label = list(
+    sleep_wknd ~ "Hours of Sleep on Weekends",
+    sleep_wkdy ~ "Hours of Sleep on Weekdays"
+  ),
+  missing_text = "Missing")|>
+  add_overall(last = TRUE)
+table1
+```
+
+```{r}
+median_wknd <- inline_text(table1, variable = "sleep_wknd", 
+						pattern = "{median}")
+
+```
+
+The overall median hours of sleep on the weekends was `r median_wknd` and was the same for all race and ethnicity categories.
