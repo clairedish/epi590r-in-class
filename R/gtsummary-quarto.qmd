@@ -33,6 +33,7 @@ nlsy <- read_csv(here::here("data", "raw", "nlsy.csv"),
 # Customization of `tbl_summary()`
 
 ```{r}
+#| eval: false
 tbl_summary(
   nlsy,
   by = sex_cat,
@@ -41,7 +42,9 @@ tbl_summary(
 ```
 
 ```{r}
-tbl_summary(
+#| label: tbl-demographics
+#| tbl-cap: "Participant Demographics"
+table1 <- tbl_summary(
   nlsy,
   by = sex_cat,
   include = c(sex_cat, race_eth_cat, region_cat,
@@ -70,7 +73,7 @@ The amount of sleep on weekends is the same across race and ethnicity. However, 
 ```{r}
 #| label: tbl-sleep
 #| tbl-cap: "Sleep Statistics"
-table1 <- tbl_summary(
+table2 <- tbl_summary(
   nlsy,
   by = race_eth_cat,
   include = c(sleep_wknd, sleep_wkdy),
@@ -84,7 +87,7 @@ table1
 ```
 
 ```{r}
-median_wknd <- inline_text(table1, variable = "sleep_wknd", 
+median_wknd <- inline_text(table2, variable = "sleep_wknd", 
 						pattern = "{median}")
 
 ```
