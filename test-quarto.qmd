@@ -1,0 +1,35 @@
+---
+title: "Practice"
+author: "Claire"
+format: docx
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## All About Jane
+
+How old does Jane like her men
+
+```{r}
+#| echo: false
+14 + 5
+```
+
+How many friends does Jane have
+
+```{r}
+#| echo: false
+2 * 1
+```
+
+## **All About Claire**
+
+How pretty is Claire on a scale of 1-10
+
+```{r}
+#| echo: false
+10 + 1 
+```
